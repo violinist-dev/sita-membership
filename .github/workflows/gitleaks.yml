@@ -1,15 +1,20 @@
 name: gitleaks
-on: [push, workflow_dispatch]
+on: [pull_request, push, workflow_dispatch]
 jobs:
   scan:
     name: gitleaks
     runs-on: ubuntu-latest
-    container:
-      image: docker:25-dind
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Run gitleaks
-        run: docker-compose up -d gitleaks
-      - name: Show logs
-        run: docker-compose logs -f gitleaks
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}} # Only required for Organizations, not personal accounts.
+          GITLEAKS_CONFIG: |
+            ---
+            commit: false
+            verification:
+              baseline_path: .gitleaks/gitleaks-report.json
+
