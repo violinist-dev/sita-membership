@@ -10,6 +10,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Run gitleaks
-        run: |
-          docker-compose up -d gitleaks |
-          docker-compose logs -f gitleaks
+        run: docker-compose up -d gitleaks
+      - name: Show logs
+        run: docker-compose logs -f gitleaks
