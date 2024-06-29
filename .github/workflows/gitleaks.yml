@@ -12,9 +12,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}} # Only required for Organizations, not personal accounts.
-          GITLEAKS_CONFIG: |
-            ---
-            commit: false
-            verification:
-              baseline_path: .gitleaks/gitleaks-report.json
 
