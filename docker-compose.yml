@@ -321,8 +321,7 @@ services:
   gitleaks:
     image: zricethezav/gitleaks:latest
     container_name: "${PROJECT_NAME}_gitleaks"
-    command: --source="/path" detect --baseline-path /path/.gitleaks/gitleaks-report.json --report-path /path/findings.json
-    # command: --source="/path" detect --report-path /path/.gitleaks/gitleaks-report.json
+    command: --source="/path" detect --baseline-path /path/.gitleaks/gitleaks-report.json --report-path /path/.gitleaks/findings.json
     volumes:
     - ./:/path
 
