@@ -1,20 +1,22 @@
-name: Code Scanning
+name: Trivy Scan
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on: [push, pull_request]
 
 jobs:
-  code_scanning:
+  trivy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Initialize GitHub CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: 'javascript,php'
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get install wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install trivy
+
+      - name: Run Trivy Scan
+        run: trivy fs --severity HIGH,CRITICAL --exit-code 1 .
